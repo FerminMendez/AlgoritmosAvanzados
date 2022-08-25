@@ -2,6 +2,7 @@
 // File: main.cpp
 // Authors:
 //  Fermín Méndez García - A01703366
+//   Ricardo Núñez Alánis - A0170.....
 // Date: 18/08/2022
 // =========================================================
 
@@ -20,15 +21,15 @@
 
 using namespace std;
 
-vector<string> greddyCoins(vector<int> coins, int target)
+string greddyCoins(vector<int> coins, int target)
 {
     string s;
+    string aux="GREEDY SOLUTION, TOTAL COINS = ";
     int sol = 0;
     int i = coins.size() - 1;
     int count = 0;
     while (i >= 0)
     {
-
         if (coins[i] <= target)
         {
             target -= coins[i];
@@ -45,7 +46,9 @@ vector<string> greddyCoins(vector<int> coins, int target)
             count = 0;
         }
     }
-    return {to_string(sol), s};
+   aux+=to_string(sol)+"\n";
+    return {aux+s};
+ 
 }
 
 // Aqui empieza la sol de DP
@@ -73,15 +76,6 @@ void DParray(int *arr, int max, vector<int> coins)
     }
 }
 
-// De acuerdo a un target específico genera el string output de DP
-/*
-Ejemplo:
-string sol=
-"DP SOLUTION, TOTAL COINS = 6
- CURRENCY = 2 AMOUNT = 1
- CURRENCY = 13 AMOUNT = 1
- CURRENCY = 16 AMOUNT = 4"
- */
 
 string sol_dp(int *array, int target, vector<int> coins)
 {
@@ -149,23 +143,12 @@ int main()
     fill(array, array + max + 1, INT_MAX);
     DParray(array, max, coins);
 
-    cout << "array" << endl;
-    for (int i = 0; i <= max; i++)
-    {
-        cout << array[i] << " ";
-    }
-    cout << endl
-         << endl;
-
     // Imprime los casos
     int i = 1;
-    vector<string> aux;
     for (auto it : cases)
     {
-        aux = greddyCoins(coins, it);
         cout << "QUERY #" << i << ", CHANGE = " << it << endl;
-        cout << "GREEDY SOLUTION, TOTAL COINS = " << aux[0]<<endl;
-        cout << aux[1];
+        cout << greddyCoins(coins, it);
         cout << endl;
         cout << sol_dp(array, it, coins);
         cout << "---------" << endl
