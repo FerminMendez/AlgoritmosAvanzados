@@ -20,8 +20,9 @@
 
 using namespace std;
 
-int greddyCoins(vector<int> coins, int target)
+vector<string> greddyCoins(vector<int> coins, int target)
 {
+    string s;
     int sol = 0;
     int i = coins.size() - 1;
     int count = 0;
@@ -38,17 +39,17 @@ int greddyCoins(vector<int> coins, int target)
         {
             if (count)
             {
-                cout << count << " coins of " << coins[i] << endl;
+                s += "CURRENCY = " + to_string(count) + " AMOUNT = " + to_string(coins[i]) + "\n";
             }
             i--;
             count = 0;
         }
     }
-    return sol;
+    return {to_string(sol), s};
 }
 
-//Aqui empieza la sol de DP
-//Se genera el memozation para el mayor caso que tendremos. Aqui estan los resultado.
+// Aqui empieza la sol de DP
+// Se genera el memozation para el mayor caso que tendremos. Aqui estan los resultado.
 void DParray(int *arr, int max, vector<int> coins)
 {
     for (auto it : coins)
@@ -72,7 +73,7 @@ void DParray(int *arr, int max, vector<int> coins)
     }
 }
 
-//De acuerdo a un target específico genera el string output de DP
+// De acuerdo a un target específico genera el string output de DP
 /*
 Ejemplo:
 string sol=
@@ -85,25 +86,25 @@ string sol=
 string sol_dp(int *array, int target, vector<int> coins)
 {
     int steps = array[target];
-    string result = "DP SOLUTION, TOTAL COINS = "+to_string(steps)+ "\n";
+    string result = "DP SOLUTION, TOTAL COINS = " + to_string(steps) + "\n";
 
     map<int, int> mymap;
     while (steps > 0)
     {
         for (auto it : coins)
         {
-            if (target ==it)
+            if (target == it)
             {
                 mymap[it]++;
                 steps--;
-                target-=it;
+                target -= it;
                 break;
             }
             else if (array[target - it] == steps - 1)
             {
                 mymap[it]++;
                 steps--;
-                target-=it;
+                target -= it;
                 break;
             }
         }
@@ -116,8 +117,6 @@ string sol_dp(int *array, int target, vector<int> coins)
 
     return result;
 }
-
-
 
 // g++ -std=c++11 main.cpp -o app
 //   ./app < inputX.txt > mysolutionX.txt
@@ -143,8 +142,8 @@ int main()
     vector<int> coins = {1, 2, 13, 16};
     // LLenar los casos de prueba en un vector
     vector<int> cases = {74, 79, 67, 68, 35, 93, 72, 29, 85};
-    int max = max_vec(cases); // Valor mas grande de cases
 
+    int max = max_vec(cases); // Valor mas grande de cases
     // Generamos el array de soluciones para DP
     int *array = new int[max + 1];
     fill(array, array + max + 1, INT_MAX);
@@ -155,18 +154,24 @@ int main()
     {
         cout << array[i] << " ";
     }
-    cout << endl<< endl;
+    cout << endl
+         << endl;
 
-    //Imprime los casos
+    // Imprime los casos
+    int i = 1;
+    vector<string> aux;
     for (auto it : cases)
     {
-        cout << "case " << it << endl;
-        cout << greddyCoins(coins, it);
-        cout << endl
-             << "-------------------" << endl
+        aux = greddyCoins(coins, it);
+        cout << "QUERY #" << i << ", CHANGE = " << it << endl;
+        cout << "GREEDY SOLUTION, TOTAL COINS = " << aux[0]<<endl;
+        cout << aux[1];
+        cout << endl;
+        cout << sol_dp(array, it, coins);
+        cout << "---------" << endl
              << endl;
 
-        cout<<sol_dp(array, it, coins);
+        i++;
     }
 
     delete[] array;
