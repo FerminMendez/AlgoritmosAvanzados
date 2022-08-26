@@ -2,7 +2,7 @@
 // File: main.cpp
 // Authors:
 //  Fermín Méndez García - A01703366
-//   Ricardo Núñez Alánis - A0170.....
+//  Ricardo Núñez Alánis - A01703259
 // Date: 18/08/2022
 // =========================================================
 
@@ -16,7 +16,11 @@
 #include <stack>
 #include <vector>
 #include <map>
+#include <fstream>
+#include <sstream>
 #include <stdio.h>
+#include <algorithm>
+#include <limits.h>
 #include <string>
 
 using namespace std;
@@ -127,15 +131,76 @@ int max_vec(vector<int> vec)
     return sol;
 }
 
+
 int main()
 {
+    const int LINE_TO_FIND_COINS = 2;
+    const int LINE_TO_FIND_CASES = 4;
     int n;
     /// cin >> n;
+    
+    string fileName;
+
+    cout << "Enter file name : \n";
+    cin >> fileName;
+    string coinsLine;
+    ifstream f( fileName );
+    for (int i=0; i<LINE_TO_FIND_COINS;i++)
+    {
+        getline(f,coinsLine);
+    }
+
+    f.close();
+
+
+
+    string casesLine;
+    ifstream f2( fileName );
+    for (int i=0; i<LINE_TO_FIND_CASES;i++)
+    {
+        getline(f2,casesLine);
+    }
+
+    f2.close();
+
+
+
+    stringstream ssCoins(coinsLine);
+    int intCoins;
+    vector<int> coins;
+
+    while( ssCoins >> intCoins){
+        coins.push_back(intCoins);
+    }
+
+
+
+    stringstream ssCases(casesLine);
+    int intCases;
+    vector<int> cases;
+
+    while( ssCases >> intCases){
+        cases.push_back(intCases);
+    }
+
+
+
+    sort (coins.begin(), coins.end()); 
+
+    /*for(int elem: cases){
+        cout<< elem<< endl;
+    }
+    return 0;*/
+
+
+
+
+
 
     // De alguna manera llenar el vector con lo valores de las monedas
-    vector<int> coins = {1, 2, 13, 16};
+    //vector<int> coins = {1, 2, 13, 16};
     // LLenar los casos de prueba en un vector
-    vector<int> cases = {74, 79, 67, 68, 35, 93, 72, 29, 85};
+    //vector<int> cases = {74, 79, 67, 68, 35, 93, 72, 29, 85};
 
     int max = max_vec(cases); // Valor mas grande de cases
     // Generamos el array de soluciones para DP
