@@ -28,7 +28,7 @@ using namespace std;
 string greddyCoins(vector<int> coins, int target)
 {
     string s;
-    string aux="GREEDY SOLUTION, TOTAL COINS = ";
+    string aux = "GREEDY SOLUTION, TOTAL COINS = ";
     int sol = 0;
     int i = coins.size() - 1;
     int count = 0;
@@ -44,15 +44,14 @@ string greddyCoins(vector<int> coins, int target)
         {
             if (count)
             {
-                s += "CURRENCY = " + to_string(count) + " AMOUNT = " + to_string(coins[i]) + "\n";
+                s = "CURRENCY = " + to_string(coins[i]) + " AMOUNT = " + to_string(count) + "\n" + s;
             }
             i--;
             count = 0;
         }
     }
-   aux+=to_string(sol)+"\n";
-    return {aux+s};
- 
+    aux += to_string(sol) + "\n";
+    return {aux + s};
 }
 
 // Aqui empieza la sol de DP
@@ -79,7 +78,6 @@ void DParray(int *arr, int max, vector<int> coins)
         }
     }
 }
-
 
 string sol_dp(int *array, int target, vector<int> coins)
 {
@@ -131,97 +129,102 @@ int max_vec(vector<int> vec)
     return sol;
 }
 
-
-int main()
+int main(int argc, char *argv[])
 {
-    const int LINE_TO_FIND_COINS = 2;
-    const int LINE_TO_FIND_CASES = 4;
-    int n;
-    /// cin >> n;
-    
-    string fileName;
-
-    cout << "Enter file name : \n";
-    cin >> fileName;
-    string coinsLine;
-    ifstream f( fileName );
-    for (int i=0; i<LINE_TO_FIND_COINS;i++)
+    for (int k = 0; k < argc; k++)
     {
-        getline(f,coinsLine);
+
+        const int LINE_TO_FIND_COINS = 2;
+        const int LINE_TO_FIND_CASES = 4;
+        int n;
+        /// cin >> n;
+
+        string fileName;
+
+        // cout << "Enter file name : \n";
+        // cin >> fileName;
+
+        fileName = argv[k];
+
+        string coinsLine;
+        ifstream f(fileName);
+        for (int i = 0; i < LINE_TO_FIND_COINS; i++)
+        {
+            getline(f, coinsLine);
+        }
+
+        f.close();
+
+        string casesLine;
+        ifstream f2(fileName);
+        for (int i = 0; i < LINE_TO_FIND_CASES; i++)
+        {
+            getline(f2, casesLine);
+        }
+
+        f2.close();
+
+        stringstream ssCoins(coinsLine);
+        int intCoins;
+        vector<int> coins;
+
+        while (ssCoins >> intCoins)
+        {
+            coins.push_back(intCoins);
+        }
+
+        stringstream ssCases(casesLine);
+        int intCases;
+        vector<int> cases;
+
+        while (ssCases >> intCases)
+        {
+            cases.push_back(intCases);
+        }
+
+        sort(coins.begin(), coins.end());
+
+        /*for(int elem: cases){
+            cout<< elem<< endl;
+        }
+        return 0;*/
+
+        // De alguna manera llenar el vector con lo valores de las monedas
+        // vector<int> coins = {1, 2, 13, 16};
+        // LLenar los casos de prueba en un vector
+        // vector<int> cases = {74, 79, 67, 68, 35, 93, 72, 29, 85};
+
+        int max = max_vec(cases); // Valor mas grande de cases
+        // Generamos el array de soluciones para DP
+        int *array = new int[max + 1];
+        fill(array, array + max + 1, INT_MAX);
+        DParray(array, max, coins);
+
+        string outputfile;
+        // Imprime los casos
+        int i = 1;
+        for (auto it : cases)
+        {
+            outputfile += "QUERY #" + to_string(i) + ", CHANGE = " + to_string(it) + "\n";
+            outputfile += greddyCoins(coins, it) + "\n";
+            outputfile += sol_dp(array, it, coins) + "\n";
+            outputfile += "---------\n";
+            i++;
+        }
+
+        cout << outputfile;
+
+        ofstream solution;
+        cout << fileName << endl;
+        cout << fileName[5];
+        string files;
+        files = fileName[5];
+
+        solution.open("mysolution" + files + ".txt");
+        solution << outputfile;
+        solution.close();
+
+        delete[] array;
     }
-
-    f.close();
-
-
-
-    string casesLine;
-    ifstream f2( fileName );
-    for (int i=0; i<LINE_TO_FIND_CASES;i++)
-    {
-        getline(f2,casesLine);
-    }
-
-    f2.close();
-
-
-
-    stringstream ssCoins(coinsLine);
-    int intCoins;
-    vector<int> coins;
-
-    while( ssCoins >> intCoins){
-        coins.push_back(intCoins);
-    }
-
-
-
-    stringstream ssCases(casesLine);
-    int intCases;
-    vector<int> cases;
-
-    while( ssCases >> intCases){
-        cases.push_back(intCases);
-    }
-
-
-
-    sort (coins.begin(), coins.end()); 
-
-    /*for(int elem: cases){
-        cout<< elem<< endl;
-    }
-    return 0;*/
-
-
-
-
-
-
-    // De alguna manera llenar el vector con lo valores de las monedas
-    //vector<int> coins = {1, 2, 13, 16};
-    // LLenar los casos de prueba en un vector
-    //vector<int> cases = {74, 79, 67, 68, 35, 93, 72, 29, 85};
-
-    int max = max_vec(cases); // Valor mas grande de cases
-    // Generamos el array de soluciones para DP
-    int *array = new int[max + 1];
-    fill(array, array + max + 1, INT_MAX);
-    DParray(array, max, coins);
-
-    // Imprime los casos
-    int i = 1;
-    for (auto it : cases)
-    {
-        cout << "QUERY #" << i << ", CHANGE = " << it << endl;
-        cout << greddyCoins(coins, it);
-        cout << endl;
-        cout << sol_dp(array, it, coins);
-        cout << "---------" << endl
-             << endl;
-
-        i++;
-    }
-
-    delete[] array;
     return 0;
 }
