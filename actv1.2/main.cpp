@@ -131,100 +131,89 @@ int max_vec(vector<int> vec)
 
 int main(int argc, char *argv[])
 {
-    for (int k = 0; k < argc; k++)
-    {
+    // Lectura de datos -------------------------------------
+	int n, moneda, q, cambio; // Variables
+    //vector<int> s, c;
+    vector<int> coins,cases;
 
-        const int LINE_TO_FIND_COINS = 2;
-        const int LINE_TO_FIND_CASES = 4;
-        int n;
-        /// cin >> n;
+    cin >> n; // Denominaciones de moneda
+    for (int i = 0; i < n; i++){ // Arreglo de monedas
+        cin >> moneda; 
+        coins.push_back(moneda);
+	}
 
-        string fileName;
+    sort(coins.begin(), coins.end());
+    //sort(s.begin(), s.end(), greater<int>()); // O(n*log2(n))
 
-        // cout << "Enter file name : \n";
-        // cin >> fileName;
+    cin >> q; // Número de consultas
+    for (int i = 0; i < q; i++){ // Arreglo de cambio
+        cin >> cambio; 
+        cases.push_back(cambio);
+	}
 
-        fileName = argv[k];
 
-        string coinsLine;
-        ifstream f(fileName);
-        for (int i = 0; i < LINE_TO_FIND_COINS; i++)
-        {
-            getline(f, coinsLine);
-        }
+    
 
-        f.close();
-
-        string casesLine;
-        ifstream f2(fileName);
-        for (int i = 0; i < LINE_TO_FIND_CASES; i++)
-        {
-            getline(f2, casesLine);
-        }
-
-        f2.close();
-
-        stringstream ssCoins(coinsLine);
-        int intCoins;
-        vector<int> coins;
-
-        while (ssCoins >> intCoins)
-        {
-            coins.push_back(intCoins);
-        }
-
-        stringstream ssCases(casesLine);
-        int intCases;
-        vector<int> cases;
-
-        while (ssCases >> intCases)
-        {
-            cases.push_back(intCases);
-        }
-
-        sort(coins.begin(), coins.end());
-
-        /*for(int elem: cases){
-            cout<< elem<< endl;
-        }
-        return 0;*/
-
-        // De alguna manera llenar el vector con lo valores de las monedas
-        // vector<int> coins = {1, 2, 13, 16};
-        // LLenar los casos de prueba en un vector
-        // vector<int> cases = {74, 79, 67, 68, 35, 93, 72, 29, 85};
-
-        int max = max_vec(cases); // Valor mas grande de cases
-        // Generamos el array de soluciones para DP
-        int *array = new int[max + 1];
-        fill(array, array + max + 1, INT_MAX);
-        DParray(array, max, coins);
-
-        string outputfile;
-        // Imprime los casos
-        int i = 1;
-        for (auto it : cases)
-        {
-            outputfile += "QUERY #" + to_string(i) + ", CHANGE = " + to_string(it) + "\n";
-            outputfile += greddyCoins(coins, it) + "\n";
-            outputfile += sol_dp(array, it, coins) + "\n";
-            outputfile += "---------\n";
-            i++;
-        }
-
-        cout << outputfile;
-
-        ofstream solution;
-        cout << fileName << endl;
-        cout << fileName[5];
-        string files;
-        files = fileName[5];
-
-        solution.open("mysolution" + files + ".txt");
-        solution << outputfile;
-        solution.close();
-
-        delete[] array;
+    /*for(int elem: cases){
+        cout<< elem<< endl;
     }
+    return 0;*/
+
+    // De alguna manera llenar el vector con lo valores de las monedas
+    // vector<int> coins = {1, 2, 13, 16};
+    //coins = {1, 2, 13, 16};
+    // LLenar los casos de prueba en un vector
+    // vector<int> cases = {74, 79, 67, 68, 35, 93, 72, 29, 85};
+    //cases = {74, 79, 67, 68, 35, 93, 72, 29, 85};
+
+    int max = max_vec(cases); // Valor mas grande de cases
+    // Generamos el array de soluciones para DP
+    int *array = new int[max + 1];
+    fill(array, array + max + 1, INT_MAX);
+    DParray(array, max, coins);
+
+    string outputfile;
+    // Imprime los casos
+    int i = 1;
+    for (auto it : cases)
+    {
+        outputfile += "QUERY #" + to_string(i) + ", CHANGE = " + to_string(it) + "\n";
+        outputfile += greddyCoins(coins, it) + "\n";
+        outputfile += sol_dp(array, it, coins);
+        outputfile += "---------\n";
+        i++;
+    }
+
+    cout << outputfile;
+
+    delete[] array;
+
     return 0;
 }
+
+/*
+// Lectura de datos -------------------------------------
+    int n, moneda, q, cambio; // Variables
+    vector<int> s, c;
+
+    cin >> n; // Denominaciones de moneda
+    for (int i = 0; i < n; i++){ // Arreglo de monedas
+        cin >> moneda; s.push_back(moneda);
+    }
+
+    sort(s.begin(), s.end(), greater<int>()); // O(n*log2(n))
+
+    cin >> q; // Número de consultas
+    for (int i = 0; i < q; i++){ // Arreglo de cambio
+        cin >> cambio; c.push_back(cambio);
+    }
+
+    */
+
+
+    /*
+    g++ -std=c++11 main.cpp -o app
+./app < input4.txt > mysolution4.txt
+diff mysolutionX.txt outputX.txt
+    
+    */
