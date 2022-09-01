@@ -1,0 +1,44 @@
+{
+  "tests": [
+    {
+      "name": "Test 1",
+      "setup": "g++ -std=c++11 main.cpp -o app",
+      "run": "./app < input1.txt > mysolution1.txt && diff mysolution1.txt output1.txt",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 25
+    },
+    {
+      "name": "Test 2",
+      "setup": "g++ -std=c++11 main.cpp -o app",
+      "run": "./app < input2.txt > mysolution2.txt && diff mysolution2.txt output2.txt",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 25
+    },
+    {
+      "name": "Test 3",
+      "setup": "g++ -std=c++11 main.cpp -o app",
+      "run": "./app < input3.txt > mysolution3.txt && diff mysolution3.txt output3.txt",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 25
+    },
+    {
+      "name": "Test 4",
+      "setup": "g++ -std=c++11 main.cpp -o app",
+      "run": "./app < input4.txt > mysolution4.txt && diff mysolution4.txt output4.txt",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 25
+    }
+  ]
+}
