@@ -19,26 +19,24 @@
 
 using namespace std;
 
-int linear(int m, int n, int x, int y)
+int linear(int m, int x, int y)
 {
-    return y * m + x;
+    return y * (m + 1) + x;
 }
 
-void printArray(int *arr, int n, int m)
+void printArray(int *arr, int m, int n)
 {
-    int count=0;
     cout << "Array" << endl;
-    for (int i = 0; i < m + 1; i++)
+    for (int j = 0; j < n + 1; j++)
     {
-        for (int j = 0; j < n + 1; j++)
+        for (int i = 0; i < m + 1; i++)
         {
-            cout << arr[linear(m, n, i, j)] << " ";
-            count++;
+            // arr[linear(m, i, j)]=linear(m, i, j);
+            cout << arr[linear(m, i, j)] << " ";
         }
         cout << endl;
         ;
     }
-    cout<<"Count "<<count;
 }
 
 int DParray(int *arr, int m, int n, string s1, string s2)
@@ -47,11 +45,27 @@ int DParray(int *arr, int m, int n, string s1, string s2)
     // Inizializar el array
     for (int i = 0; i < m + 1; i++)
     {
-        arr[linear(m, n, i, 0)] = 1;
+        arr[linear(m, i, 0)] = 0;
     }
     for (int i = 0; i < n + 1; i++)
     {
-        arr[linear(m, n, 0, i)] = 1;
+        arr[linear(m, 0, i)] = 0;
+    }
+
+    for (int i = 1; i < m + 1; i++)
+    {
+        for (int j = 1; j < n + 1; j++)
+        {
+            if (s1[i - 1] == s2[j - 1])
+            {
+                int x = arr[linear(m, i - 1, j - 1)] + 1;
+                arr[linear(m, i, j)] = x;
+                if (x > arr[sol])
+                {
+                    sol = linear(m, i, j);
+                }
+            }
+        }
     }
 
     return sol;
@@ -60,17 +74,25 @@ int DParray(int *arr, int m, int n, string s1, string s2)
 int main()
 {
     string s1 = "I I Im got this feeling yeah you know";
-    string s2 = "Ropompompom feeling, one to tri for fai";
+    string s2 = "Ropompompom feeling";
     int m = s1.size();
     int n = s2.size();
     int size = (m + 1) * (n + 1);
-    cout<<"m "<<m<<endl;
-    cout<<"n "<<n<<endl;
+    cout << "m " << m << endl;
+    cout << "n " << n << endl;
     int *array = new int[size];
     fill(array, array + (m + 1) * (n + 1), 0);
     int index = DParray(array, m, n, s1, s2);
-    printArray(array, m, n);
 
+    cout << "Longest Substring" << endl;
+    string longsubs;
+    while (array[index] != 0)
+    {
+        longsubs = s1[index % (m + 1)] + longsubs;
+        index = index - 2 - m;
+    }
+    cout << longsubs << endl;
+    printArray(array, m, n);
 
     delete[] array;
 
