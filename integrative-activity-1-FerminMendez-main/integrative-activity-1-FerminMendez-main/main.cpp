@@ -65,36 +65,44 @@ int DParray(int *arr, int m, int n, string s1, string s2)
                     sol = linear(m, i, j);
                 }
             }
+            else{
+                  arr[linear(m, i, j)] = 0;
+            }
         }
     }
 
     return sol;
 }
 
-int main()
+string longestSubstring(string s1, string s2)
 {
-    string s1 = "I I Im got this feeling yeah you know";
-    string s2 = "Ropompompom feeling";
     int m = s1.size();
     int n = s2.size();
     int size = (m + 1) * (n + 1);
     cout << "m " << m << endl;
     cout << "n " << n << endl;
     int *array = new int[size];
-    fill(array, array + (m + 1) * (n + 1), 0);
+    //fill(array, array + (m + 1) * (n + 1), 0);
     int index = DParray(array, m, n, s1, s2);
 
-    cout << "Longest Substring" << endl;
     string longsubs;
     while (array[index] != 0)
     {
         longsubs = s1[index % (m + 1)] + longsubs;
         index = index - 2 - m;
     }
-    cout << longsubs << endl;
-    printArray(array, m, n);
+    //printArray(array, m, n);
 
     delete[] array;
+    return longsubs;
+}
 
+int main()
+{
+    string s1 = "I I Im got this feeling yeah you know";
+    string s2 = "Ropompompom feeling";
+
+    cout << "Longest Substring" << endl;
+    cout << longestSubstring(s1, s2) << endl;
     return 0;
 }
